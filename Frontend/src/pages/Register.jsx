@@ -1,23 +1,50 @@
 import React, { useState } from "react";
+import AuthService from "../services/auth.service"; // ถ้าคุณใช้ AuthService
+import { useNavigate } from "react-router"; // เปลี่ยนเป็น useNavigate ที่ถูกต้อง
+import Swal from "sweetalert2"; // เพิ่ม SweetAlert2 สำหรับแจ้งเตือน
 
 const Register = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [user, setUser] = useState({
+    username: "",
+    password: "",
+  });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUser((prevState) => ({ ...prevState, [name]: value }));
+  };
 
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
-      return;
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // ป้องกันการรีเฟรชหน้าเมื่อกด Submit
+
+    try {
+      const response = await AuthService.register(user.username, user.password); // ใช้ async/await สำหรับการสมัคร
+      if (response.status === 200) {
+        Swal.fire({
+          title: "User Registration",
+          text: response.data.message || "Registration successful!",
+          icon: "success",
+        });
+        navigate("/login"); // หลังจากสมัครเสร็จให้ไปหน้า login
+      } else {
+        Swal.fire({
+          title: "Error",
+          text:
+            response.data.message || "Registration failed. Please try again.",
+          icon: "error",
+        });
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+      Swal.fire({
+        title: "Error",
+        text:
+          error.response?.data?.message ||
+          "Something went wrong. Please try again.",
+        icon: "error",
+      });
     }
-
-    console.log({ username, email, password });
-
-    //navigate("/login");
   };
 
   return (
@@ -35,9 +62,10 @@ const Register = () => {
             <input
               type="text"
               id="username"
+              name="username" // เพิ่ม name attribute
               className="input input-bordered w-full"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={user.username} // ใช้ user.username
+              onChange={handleChange} // ใช้ handleChange
               required
             />
           </div>
@@ -52,9 +80,10 @@ const Register = () => {
             <input
               type="password"
               id="password"
+              name="password" // เพิ่ม name attribute
               className="input input-bordered w-full"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={user.password} // ใช้ user.password
+              onChange={handleChange} // ใช้ handleChange
               required
             />
           </div>

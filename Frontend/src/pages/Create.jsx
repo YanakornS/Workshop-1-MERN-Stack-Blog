@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 const Create = () => {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
@@ -91,13 +92,24 @@ const Create = () => {
             >
               Content
             </label>
-            <textarea
+            <ReactQuill
               id="content"
               className="textarea textarea-bordered w-full"
               rows="4"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              required
+              theme="snow"
+              modules={{
+                toolbar: [
+                  [{ header: [1, 2, false] }], // Combine header options
+                  [{ list: "ordered" }, { list: "bullet" }],
+                  ["bold", "italic", "underline"],
+                  ["link"],
+                  [{ align: [] }], // Include alignment options (left, center, right)
+                  ["image"],
+                  ["clean"],
+                ],
+              }}
             />
           </div>
           <div className="mb-4">
