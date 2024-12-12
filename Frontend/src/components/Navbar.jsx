@@ -1,19 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useAuthContext } from "../Contexts/AuthContext";
 import LoginButton from "./LoginButton";
 import RegisterButton from "./RegisterButton";
 import Header from "./Header";
-
-const menus = {
-  ROLES_USER: [
-    { name: "Home", link: "/home" },
-    { name: "AddHotel", link: "/AddHotel" },
-  ],
-};
+import UserProfile from "./UserProfile";
 
 const Navbar = () => {
+  const { user } = useAuthContext(); // ดึงข้อมูลผู้ใช้จาก context
+
   return (
     <div>
-      <div className="navbar bg-neutral text-neutral-content text-white ">
+      <div className="navbar bg-neutral text-neutral-content text-white">
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -34,62 +31,47 @@ const Navbar = () => {
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+              className="menu menu-sm dropdown-content bg-base-100 font-semibold  text-neutral rounded-box z-[1] mt-3 w-52 p-2 shadow"
             >
-              <li>
-                <a> Create</a>
-              </li>
-              <li>
-                <a>Parent</a>
-                <ul className="p-2">
-                  <li>
-                    <a>Submenu 1</a>
-                  </li>
-                  <li>
-                    <a>Submenu 2</a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a>Item 3</a>
-              </li>
+              <li><a href="/create">Create new Post</a></li>
+              <li><a href="#">Item 3</a></li>
             </ul>
           </div>
           <a href="/Home" className="btn btn-ghost text-xl">
             <Header />
           </a>
         </div>
+
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
             <li>
-              <a>Create new Post</a>
+              <a href="/create">Create new Post</a>
             </li>
             <li>
-              <details>
-                <summary>Parent</summary>
-                <ul className="p-2">
-                  <li>
-                    <a>Submenu 1</a>
-                  </li>
-                  <li>
-                    <a>Submenu 2</a>
-                  </li>
-                </ul>
-              </details>
-            </li>
-            <li>
-              <a>Item 3</a>
+              <a href="#">Item 3</a>
             </li>
           </ul>
         </div>
+
         <div className="navbar-end">
-          <div className="space-x-2">
-            <a href="/login">
-              <LoginButton />
-            </a>
-            <a href="/register">
-              <RegisterButton />
-            </a>
+          <div className="flex items-center space-x-2">
+            {user ? (
+              <div className="flex items-center space-x-2 border border-gray-300 rounded-lg shadow-xl px-2 py-1.5">
+                <span className="text-sm">
+                  Welcome, <span className="font-semibold">{user.username}</span>
+                </span>
+                <UserProfile />
+              </div>
+            ) : (
+              <>
+                <a href="/login">
+                  <LoginButton />
+                </a>
+                <a href="/register">
+                  <RegisterButton />
+                </a>
+              </>
+            )}
           </div>
         </div>
       </div>

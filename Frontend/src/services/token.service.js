@@ -1,17 +1,19 @@
 const getLocalAccessToken = () => {
   const user = getUser();
+  console.log("Access Token:", user?.accessToken); // ตรวจสอบค่า accessToken ที่เก็บใน localStorage
   return user?.accessToken;
 };
-const setUser = () => {
-  localStorage.setItem("user", JSON.stringify(user));
+
+const setUser = (user) => {
+  localStorage.setItem("user", JSON.stringify(user)); // เก็บข้อมูล user ใน localStorage
 };
 
 const getUser = () => {
-  return JSON.parse(localStorage.getItem("user"));
+  return JSON.parse(localStorage.getItem("user")); // ดึงข้อมูลจาก localStorage
 };
 
 const removeUser = () => {
-  localStorage.removeItem("user");
+  localStorage.removeItem("user"); // ลบข้อมูล user
 };
 
 const Tokenservice = {

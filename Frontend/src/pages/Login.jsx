@@ -1,14 +1,37 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router"; // ใช้สำหรับการนำทาง
+import AuthService from "../services/auth.service"; // เชื่อมต่อ AuthService
+import Swal from "sweetalert2"; // แจ้งเตือน
+import { useAuthContext } from "../Contexts/AuthContext"; // import useAuthContext
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const { login } = useAuthContext(); // เรียกใช้ login จาก context
 
-  const handleSubmit = (e) => {
+   const handleSubmit = async (e) => {
     e.preventDefault();
-    // เพิ่มฟังก์ชันสำหรับการล็อกอิน เช่น ส่งข้อมูลไป API
-    console.log({ email, password });
+    try {
+      const response = await AuthService.login(username, password);
+      if (response.status === 200) {
+        Swal.fire({
+          title: "Login Successful",
+          text: "Welcome back!",
+          icon: "success",
+        });
+        login(response.data.user); // เรียกใช้ login จาก context เพื่ออัปเดตสถานะผู้ใช้
+        navigate("/Home");
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "Login Failed",
+        text: error.response?.data?.message || "Invalid username or password.",
+        icon: "error",
+      });
+    }
   };
+
 
   return (
     <div className="flex justify-center items-center h-screen bg-gradient-to-b from-[#8B5DFF] to-[#5A3DFF]">
@@ -18,16 +41,16 @@ const Login = () => {
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="email"
+              htmlFor="username"
             >
               Username
             </label>
             <input
-              type="email"
-              id="email"
+              type="text"
+              id="username"
               className="input input-bordered w-full"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
           </div>
