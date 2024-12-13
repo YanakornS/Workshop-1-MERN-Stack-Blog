@@ -1,6 +1,7 @@
 import React from "react";
 import { useAuthContext } from "../Contexts/AuthContext";
 import { useNavigate, Link } from "react-router";
+import Swal from "sweetalert2";
 
 //Import รูปเข้ามา
 import Logout from "../assets/logout.png";
@@ -11,8 +12,22 @@ const UserProfile = () => {
   const navigate = useNavigate(); // ใช้ navigate เพื่อเปลี่ยนเส้นทาง
 
   const handleLogout = () => {
-    logout(); // เรียกใช้ฟังก์ชัน logout
-    navigate("/Login"); // ใช้ navigate เพื่อเปลี่ยนเส้นทางไปที่หน้า Login
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out of your account.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, logout",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logout(); // เรียกใช้ฟังก์ชัน logout
+        navigate("/Login"); // ใช้ navigate เพื่อเปลี่ยนเส้นทางไปที่หน้า Login
+        Swal.fire("Logged Out", "You have been logged out.", "success");
+      }
+    });
   };
 
   return (

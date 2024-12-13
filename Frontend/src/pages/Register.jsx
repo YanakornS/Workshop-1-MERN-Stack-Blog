@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AuthService from "../services/auth.service"; // ถ้าคุณใช้ AuthService
 import { useNavigate } from "react-router"; // เปลี่ยนเป็น useNavigate ที่ถูกต้อง
 import Swal from "sweetalert2"; // เพิ่ม SweetAlert2 สำหรับแจ้งเตือน
+import { useAuthContext } from "../Contexts/AuthContext"; // import useAuthContext
 
 const Register = () => {
   const navigate = useNavigate();
@@ -9,6 +10,13 @@ const Register = () => {
     username: "",
     password: "",
   });
+
+  const { user: loggedUser } = useAuthContext(); // เรียกใช้ login จาก context
+  useEffect(() => {
+    if (loggedUser) {
+      navigate("/");
+    }
+  }, [loggedUser]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

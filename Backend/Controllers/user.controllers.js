@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../Models/User");
 const salt = bcrypt.genSaltSync(10);
-const secretKey = "my_hardcoded_secret_key";
+const SECRET = process.env.SECRET;
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
@@ -22,14 +22,14 @@ exports.login = async (req, res) => {
       });
     }
 
-    const isPasswordValid = bcrypt.compareSync(password, user.password);
+    const isPasswordValid = bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).send({
         message: "Invalid password",
       });
     }
 
-    const token = jwt.sign({ id: user._id, username: user.username }, secretKey, {
+    const token = jwt.sign({ id: user._id, username: user.username }, SECRET, {
       expiresIn: "1h",
     });
 
@@ -39,11 +39,11 @@ exports.login = async (req, res) => {
         id: user._id,
         username: user.username,
       },
-      token,
+      accessToken: token,
     });
   } catch (error) {
     return res.status(500).send({
-      message: error.message || "An error occurred during login",
+      message: error.message || "Internal Server Error:Authentication Failed",
     });
   }
 };

@@ -19,7 +19,6 @@ const app = express();
 app.use(cors({ origin: BASE_URL, credentials: true }));
 app.use(express.json());
 
-
 app.get("/", (req, res) => {
   res.send("<h1>Welcome  To SE NPRU Blog Restful API </h1>");
 });

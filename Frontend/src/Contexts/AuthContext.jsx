@@ -1,29 +1,33 @@
-import React, { useState, useContext, createContext, useEffect } from "react";
+import { useState, useContext, createContext, useEffect } from "react";
 import AuthService from "../services/auth.service";
+import { Cookies } from "react-cookie";
+
+const cookies = new Cookies();
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
+  const [user, setUser] = useState(getUser);
 
-  const login = (user) => {
-    setUser(user);
-  };
+  const login = (user) => setUser(user);
 
   const logout = () => {
     AuthService.logout();
     setUser(null);
+    AuthService.logoutCookies();
+    setUser(null);
   };
 
+  function getUser() {
+    const savedUser = cookies.get("user") || null;
+    return savedUser;
+  }
+
   useEffect(() => {
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user)); // เก็บผู้ใช้ลง localStorage
-    } else {
-      localStorage.removeItem("user"); // ลบผู้ใช้เมื่อออกจากระบบ
-    }
+    cookies.set("user", JSON.stringify(user), {
+      path: "/",
+      expires: new Date(Date.now() + 86400),
+    });
   }, [user]);
 
   return (

@@ -1,26 +1,31 @@
+import { Cookies } from "react-cookie";
+const cookies = new Cookies();
+
 const getLocalAccessToken = () => {
   const user = getUser();
-  console.log("Access Token:", user?.accessToken); // ตรวจสอบค่า accessToken ที่เก็บใน localStorage
   return user?.accessToken;
 };
-
-const setUser = (user) => {
-  localStorage.setItem("user", JSON.stringify(user)); // เก็บข้อมูล user ใน localStorage
-};
-
+console.log("Access Token:", user?.accessToken); // ตรวจสอบค่า accessToken ที่เก็บใน localStorage
 const getUser = () => {
-  return JSON.parse(localStorage.getItem("user")); // ดึงข้อมูลจาก localStorage
+  const user = cookies.get("user");
+  return user;
 };
 
 const removeUser = () => {
-  localStorage.removeItem("user"); // ลบข้อมูล user
+  cookies.remove("user", { path: "/" });
 };
 
-const Tokenservice = {
+const setUser = (user) => {
+  cookies.set("user", JSON.stringify(user), {
+    path: "/",
+    expires: new Date(Date.now() + 86400),
+  });
+};
+const TokenService = {
   getLocalAccessToken,
   setUser,
   getUser,
   removeUser,
 };
 
-export default Tokenservice;
+export default TokenService;

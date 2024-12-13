@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router"; // ใช้สำหรับการนำทาง
 import AuthService from "../services/auth.service"; // เชื่อมต่อ AuthService
 import Swal from "sweetalert2"; // แจ้งเตือน
@@ -8,12 +8,18 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuthContext(); // เรียกใช้ login จาก context
 
-   const handleSubmit = async (e) => {
+  const { login, user: loggedUser } = useAuthContext(); // เรียกใช้ login จาก context
+  useEffect(() => {
+    if (loggedUser) {
+      navigate("/");
+    }
+  }, [loggedUser]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await AuthService.login(username, password);
+      const response = await AuthService.loginCookies(username, password);
       if (response.status === 200) {
         Swal.fire({
           title: "Login Successful",
@@ -31,7 +37,6 @@ const Login = () => {
       });
     }
   };
-
 
   return (
     <div className="flex justify-center items-center h-screen bg-gradient-to-b from-[#8B5DFF] to-[#5A3DFF]">

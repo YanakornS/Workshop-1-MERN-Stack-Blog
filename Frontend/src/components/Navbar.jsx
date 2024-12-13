@@ -8,6 +8,7 @@ import UserProfile from "./UserProfile";
 const Navbar = () => {
   const { user } = useAuthContext(); // ดึงข้อมูลผู้ใช้จาก context
 
+  
   return (
     <div>
       <div className="navbar bg-neutral text-neutral-content text-white">
@@ -33,8 +34,12 @@ const Navbar = () => {
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-base-100 font-semibold  text-neutral rounded-box z-[1] mt-3 w-52 p-2 shadow"
             >
-              <li><a href="/create">Create new Post</a></li>
-              <li><a href="#">Item 3</a></li>
+              <li>
+                <a href="/create">Create new Post</a>
+              </li>
+              <li>
+                <a href="#">Item 3</a>
+              </li>
             </ul>
           </div>
           <a href="/Home" className="btn btn-ghost text-xl">
@@ -58,7 +63,8 @@ const Navbar = () => {
             {user ? (
               <div className="flex items-center space-x-2 border border-gray-300 rounded-lg shadow-xl px-2 py-1.5">
                 <span className="text-sm">
-                  Welcome, <span className="font-semibold">{user.username}</span>
+                  Welcome,{" "}
+                  <span className="font-semibold">{user.username}</span>
                 </span>
                 <UserProfile />
               </div>
