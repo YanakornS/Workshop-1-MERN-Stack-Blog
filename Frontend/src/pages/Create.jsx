@@ -1,139 +1,170 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-const Create = () => {
-  const [title, setTitle] = useState("");
-  const [summary, setSummary] = useState("");
-  const [content, setContent] = useState("");
-  const [image, setImage] = useState(null);
-  //const navigate = useNavigate();
+import PostService from "../services/post.service";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file);
+const Create = () => {
+  const [postDetail, setPostDetail] = useState({
+    title: "",
+    summary: "",
+    content: "",
+    file: "",
+  });
+
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "file") {
+      setPostDetail({ ...postDetail, [name]: e.target.files[0] });
+    } else {
+      setPostDetail({ ...postDetail, [name]: value });
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // ตรวจสอบว่ามีข้อมูลครบถ้วนหรือไม่
-    if (!title || !summary || !content || !image) {
-      alert("Please fill out all fields and upload an image.");
-      return;
-    }
-
-    // สร้าง FormData เพื่อส่งข้อมูลไปยัง API (หากต้องการ)
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("summary", summary);
-    formData.append("content", content);
-    formData.append("image", image);
-
+  const handleSubmit = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/posts", {
-        method: "POST",
-        body: formData,
-      });
-      if (response.ok) {
-        alert("Post created successfully!");
-        //navigate("/"); // เปลี่ยนเส้นทางไปที่หน้า Home
+      const data = new FormData();
+      data.set("title", postDetail.title);
+      data.set("summary", postDetail.summary);
+      data.set("content", postDetail.content);
+      if (postDetail.file) {
+        data.set("file", postDetail.file);
+      }
+
+      const response = await PostService.createPost(data);
+
+      if (response.status === 200) {
+        Swal.fire({
+          title: "Create Post",
+          text: "Post created successfully.",
+          icon: "success",
+        }).then(() => {
+          setPostDetail({
+            title: "",
+            summary: "",
+            content: "",
+            file: "",
+          });
+        });
+
+        navigate("/");
       } else {
-        const data = await response.json();
-        alert(`Error: ${data.message}`);
+        Swal.fire({
+          title: "Error",
+          text: "Something went wrong. Please try again.",
+          icon: "error",
+        });
       }
     } catch (error) {
-      alert("Error creating post: " + error.message);
+      Swal.fire({
+        title: "Error",
+        text:
+          error.response?.data?.message ||
+          "An error occurred. Please try again.",
+        icon: "error",
+      });
     }
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gradient-to-b from-[#8B5DFF] to-[#5A3DFF]">
-      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-96">
-        <h1 className="text-2xl font-bold text-center mb-4">Create Post</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="title"
-            >
-              Title
-            </label>
-            <input
-              type="text"
-              id="title"
-              className="input input-bordered w-full"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="summary"
-            >
-              Summary
-            </label>
-            <input
-              type="text"
-              id="summary"
-              className="input input-bordered w-full"
-              value={summary}
-              onChange={(e) => setSummary(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="content"
-            >
-              Content
-            </label>
-            <ReactQuill
-              id="content"
-              className="textarea textarea-bordered w-full"
-              rows="4"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              theme="snow"
-              modules={{
-                toolbar: [
-                  [{ header: [1, 2, false] }], // Combine header options
-                  [{ list: "ordered" }, { list: "bullet" }],
-                  ["bold", "italic", "underline"],
-                  ["link"],
-                  [{ align: [] }], // Include alignment options (left, center, right)
-                  ["image"],
-                  ["clean"],
-                ],
-              }}
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="image"
-            >
-              Upload Image
-            </label>
-            <input
-              type="file"
-              id="image"
-              className="file-input file-input-bordered w-full"
-              accept="image/*"
-              onChange={handleImageChange}
-              required
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <button type="submit" className="btn btn-primary w-full">
-              Create Post
-            </button>
-          </div>
-        </form>
+    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
+      <h1 className="text-3xl font-bold text-center mb-6">Create New Post</h1>
+      <div className="space-y-6">
+        <div>
+          <label
+            htmlFor="title"
+            className="block text-lg font-semibold text-gray-700"
+          >
+            Title
+          </label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            className="mt-2 p-3 w-full border border-gray-300 rounded-md"
+            value={postDetail.title}
+            onChange={handleChange}
+            placeholder="Enter the post title"
+            required
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="summary"
+            className="block text-lg font-semibold text-gray-700"
+          >
+            Summary
+          </label>
+          <textarea
+            id="summary"
+            name="summary"
+            className="mt-2 p-3 w-full border border-gray-300 rounded-md"
+            value={postDetail.summary}
+            onChange={handleChange}
+            placeholder="Write a short summary"
+            rows="3"
+            required
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="content"
+            className="block text-lg font-semibold text-gray-700"
+          >
+            Content
+          </label>
+          <ReactQuill
+            value={postDetail.content}
+            onChange={(value) =>
+              setPostDetail({ ...postDetail, content: value })
+            }
+            placeholder="Write the content of your post"
+            className="mt-2 border border-gray-300 rounded-md"
+            theme="snow"
+            modules={{
+              toolbar: [
+                [{ header: "1" }, { header: "2" }, { font: [] }],
+                [{ list: "ordered" }, { list: "bullet" }],
+                ["bold", "italic", "underline"],
+                ["link"],
+                [{ align: [] }],
+                ["image"],
+                ["clean"],
+              ],
+            }}
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="file"
+            className="block text-lg font-semibold text-gray-700"
+          >
+            Upload Image
+          </label>
+          <input
+            type="file"
+            id="file"
+            name="file"
+            className="mt-2 p-3 w-full border border-gray-300 rounded-md"
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="text-center">
+          <button
+            onClick={handleSubmit}
+            type="button"
+            className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600"
+          >
+            Create Post
+          </button>
+        </div>
       </div>
     </div>
   );

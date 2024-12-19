@@ -17,7 +17,7 @@ const loginCookies = async (username, password) => {
   const { status, data } = response;
   if (status === 200) {
     if (data.accessToken) {
-      cookies.set("token", data.accessToken, {
+      cookies.set("accesstoken", data.accessToken, {
         path: "/",
         expires: new Date(Date.now() + 86400 * 1000), // 24 ชั่วโมง
         sameSite: "Lax",
@@ -28,7 +28,7 @@ const loginCookies = async (username, password) => {
       path: "/",
     });
   }
-  console.log("Cookies set:", cookies.get("token"));
+  console.log("Cookies set:", cookies.get("accesstoken"));
   return response;
 };
 

@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 5000;
 const BASE_URL = process.env.BASE_URL;
 const DB_URL = process.env.DB_URL;
 const userRouter = require("./routers/user.router");
+const postRouter = require("./routers/post.router");
 
 try {
   mongoose.connect(DB_URL);
@@ -24,8 +25,8 @@ app.get("/", (req, res) => {
 });
 
 //Use Router
-
 app.use("/api/v1/auth", userRouter);
+app.use("/api/v1/post", postRouter);
 
 app.listen(PORT, () => {
   console.log("Server in Running http://localhost:" + PORT);
