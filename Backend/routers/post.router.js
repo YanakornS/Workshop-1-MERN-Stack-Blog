@@ -8,4 +8,7 @@ const authJwt = require("../middlewares/authJwt.middlewares");
 
 router.post("", authJwt.verifyToken, upload, postController.createPost);
 
+// GET: Get all posts
+router.get("/", postController.getAllPosts);
+
 module.exports = router;

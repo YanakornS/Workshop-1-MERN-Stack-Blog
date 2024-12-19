@@ -70,101 +70,101 @@ const Create = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-3xl font-bold text-center mb-6">Create New Post</h1>
-      <div className="space-y-6">
-        <div>
-          <label
-            htmlFor="title"
-            className="block text-lg font-semibold text-gray-700"
-          >
-            Title
-          </label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            className="mt-2 p-3 w-full border border-gray-300 rounded-md"
-            value={postDetail.title}
-            onChange={handleChange}
-            placeholder="Enter the post title"
-            required
-          />
-        </div>
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-[#8B5DFF] to-[#5A3DFF] px-4">
+      <div className="bg-white shadow-md rounded-lg px-12 pt-8 pb-10 mb-4 w-full max-w-2xl">
+        <h1 className="text-3xl font-bold text-center mb-6">Create Post</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-6">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="title"
+            >
+              Title
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              className="input input-bordered w-full"
+              value={postDetail.title}
+              onChange={handleChange}
+              placeholder="Enter the post title"
+              required
+            />
+          </div>
+          <div className="mb-6">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="summary"
+            >
+              Summary
+            </label>
+            <input
+              type="text"
+              id="summary"
+              name="summary"
+              className="input input-bordered w-full"
+              value={postDetail.summary}
+              onChange={handleChange}
+              placeholder="Write a short summary"
+              required
+            />
+          </div>
+          <div className="mb-6">
+            <label
+              className="block text-gray-700 text-sm font-semibold mb-2 truncate"
+              htmlFor="content"
+            >
+              Content
+            </label>
+            <ReactQuill
+              id="content"
+              className="quill-editor w-full"
+              value={postDetail.content}
+              onChange={(value) =>
+                setPostDetail({ ...postDetail, content: value })
+              }
+              theme="snow"
+              modules={{
+                toolbar: [
+                  [{ header: [1, 2, false] }],
+                  [{ list: "ordered" }, { list: "bullet" }],
+                  ["bold", "italic", "underline"],
+                  ["link"],
+                  [{ align: [] }],
+                  
+                  ["image"],
+                  ["clean"],
 
-        <div>
-          <label
-            htmlFor="summary"
-            className="block text-lg font-semibold text-gray-700"
-          >
-            Summary
-          </label>
-          <textarea
-            id="summary"
-            name="summary"
-            className="mt-2 p-3 w-full border border-gray-300 rounded-md"
-            value={postDetail.summary}
-            onChange={handleChange}
-            placeholder="Write a short summary"
-            rows="3"
-            required
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="content"
-            className="block text-lg font-semibold text-gray-700"
-          >
-            Content
-          </label>
-          <ReactQuill
-            value={postDetail.content}
-            onChange={(value) =>
-              setPostDetail({ ...postDetail, content: value })
-            }
-            placeholder="Write the content of your post"
-            className="mt-2 border border-gray-300 rounded-md"
-            theme="snow"
-            modules={{
-              toolbar: [
-                [{ header: "1" }, { header: "2" }, { font: [] }],
-                [{ list: "ordered" }, { list: "bullet" }],
-                ["bold", "italic", "underline"],
-                ["link"],
-                [{ align: [] }],
-                ["image"],
-                ["clean"],
-              ],
-            }}
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="file"
-            className="block text-lg font-semibold text-gray-700"
-          >
-            Upload Image
-          </label>
-          <input
-            type="file"
-            id="file"
-            name="file"
-            className="mt-2 p-3 w-full border border-gray-300 rounded-md"
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="text-center">
-          <button
-            onClick={handleSubmit}
-            type="button"
-            className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600"
-          >
-            Create Post
-          </button>
-        </div>
+                ],
+              }}
+            />
+          </div>
+          <div className="mb-6">
+            <label
+              className="block text-gray-700 text-sm font-semibold mb-2 truncate"
+              htmlFor="file"
+            >
+              Upload Image
+            </label>
+            <input
+              type="file"
+              id="file"
+              name="file"
+              className="file-input file-input-bordered w-full"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <button
+              onClick={handleSubmit}
+              type="button"
+              className="btn btn-primary w-full"
+            >
+              Create Post
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

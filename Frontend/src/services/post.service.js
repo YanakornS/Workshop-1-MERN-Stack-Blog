@@ -10,8 +10,15 @@ const createPost = async (post) => {
   return response;
 };
 
+// Get all posts
+const getAllPosts = async () => {
+  const response = await api.get(API_URL); // Using the same API_URL for the GET request
+  return response;
+};
+
 const PostService = {
   createPost,
+   getAllPosts, 
 };
 
 export default PostService;
