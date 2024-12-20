@@ -62,7 +62,7 @@ const logout = () => {
 };
 
 const logoutCookies = () => {
-  cookies.remove("token", { path: "/" }); // ลบข้อมูลเมื่อ logout
+  cookies.remove("accesstoken", { path: "/" }); // ลบข้อมูลเมื่อ logout
   cookies.remove("user", { path: "/" });
 };
 

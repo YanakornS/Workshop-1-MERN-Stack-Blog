@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PostService from "../services/post.service";
-const API_URL = import.meta.env.VITE_BASE
+const API_URL = import.meta.env.VITE_URL;
 const PostsList = () => {
   const [posts, setPosts] = useState([]);
 
@@ -8,7 +8,7 @@ const PostsList = () => {
     // Fetch all posts when the component mounts
     const fetchPosts = async () => {
       try {
-        const response = await PostService.getAllPosts();
+        const response = await PostService.getPosts();
         setPosts(response.data); // Assuming the response contains an array of posts
       } catch (error) {
         console.error("There was an error fetching the posts:", error);
@@ -35,12 +35,12 @@ const PostsList = () => {
               className="bg-white shadow-xl rounded-lg overflow-hidden transform hover:scale-105 transition-all duration-300 ease-in-out"
             >
               {post.cover && (
-  <img
-    src={`http://localhost:5000/${post.cover}`} // ให้ใช้ URL ที่เหมาะสมกับ path ของภาพ
-    alt={post.title}
-    className="w-full h-56 sm:h-72 object-cover object-center"
-  />
-)}
+                <img
+                  src={`${API_URL}/${post.cover}`} // ให้ใช้ URL ที่เหมาะสมกับ path ของภาพ
+                  alt={post.title}
+                  className="w-full h-56 sm:h-72 object-cover object-center"
+                />
+              )}
 
               <div className="p-6">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-3 hover:text-indigo-600 transition-colors duration-200">

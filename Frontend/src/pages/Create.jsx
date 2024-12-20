@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import PostService from "../services/post.service";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
+import Editor from "../components/Editor";
 
 const Create = () => {
   const [postDetail, setPostDetail] = useState({
@@ -13,6 +14,8 @@ const Create = () => {
     file: "",
   });
 
+  const [content, setcontent] = useState("");
+  const editorRef = useRef(null);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -22,6 +25,11 @@ const Create = () => {
     } else {
       setPostDetail({ ...postDetail, [name]: value });
     }
+  };
+
+  const handleContentChang = (value) => {
+    setcontent(value);
+    setPostDetail({ ...postDetail, content: content });
   };
 
   const handleSubmit = async () => {
@@ -117,27 +125,10 @@ const Create = () => {
             >
               Content
             </label>
-            <ReactQuill
-              id="content"
-              className="quill-editor w-full"
-              value={postDetail.content}
-              onChange={(value) =>
-                setPostDetail({ ...postDetail, content: value })
-              }
-              theme="snow"
-              modules={{
-                toolbar: [
-                  [{ header: [1, 2, false] }],
-                  [{ list: "ordered" }, { list: "bullet" }],
-                  ["bold", "italic", "underline"],
-                  ["link"],
-                  [{ align: [] }],
-                  
-                  ["image"],
-                  ["clean"],
-
-                ],
-              }}
+            <Editor
+              value={content}
+              onChange={handleContentChang}
+              ref={editorRef}
             />
           </div>
           <div className="mb-6">
