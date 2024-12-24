@@ -39,8 +39,8 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gradient-to-b from-[#8B5DFF] to-[#5A3DFF]">
-      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-96">
+    <div className="flex justify-center items-center h-screen bg-gradient-to-b from-#FFF8E6">
+      <div className="bg-white shadow-2xl rounded px-8 pt-6 pb-8 mb-4 w-96">
         <h1 className="text-2xl font-bold text-center mb-4">Login</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -53,7 +53,7 @@ const Login = () => {
             <input
               type="text"
               id="username"
-              className="input input-bordered w-full"
+              className="input input-bordered  w-full"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required

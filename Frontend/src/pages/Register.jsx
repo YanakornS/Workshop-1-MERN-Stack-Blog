@@ -56,7 +56,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gradient-to-b from-[#8B5DFF] to-[#5A3DFF]">
+    <div className="flex justify-center items-center h-screen bg-gradient-to-b from-#FFF8E6">
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-96">
         <h1 className="text-2xl font-bold text-center mb-4">Register</h1>
         <form onSubmit={handleSubmit}>
