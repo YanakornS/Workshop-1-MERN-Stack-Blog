@@ -14,4 +14,10 @@ router.get("/", postController.getPosts);
 // GET: GetBYID posts
 router.get("/:id", postController.getById);
 
+// Delete: Delete  posts ByID
+router.delete("/:id", authJwt.verifyToken, postController.deletePost);
+
+// Delete: Delete  posts ByID
+router.put("/:id", authJwt.verifyToken, upload, postController.updatePost);
+
 module.exports = router;

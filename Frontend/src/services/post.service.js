@@ -16,16 +16,25 @@ const getPosts = async () => {
   return response;
 };
 
-// Get all posts
+// Get postsBYID
 const getPostById = async (id) => {
   return await api.get(`${API_URL}/${id}`);
 };
 
-const getByPostId = async (req, res) => {};
+// Delete posts
+const DeletePost = async (id) => {
+  return await api.delete(`${API_URL}/${id}`);
+};
+
+// UpdatePost posts
+const updatePost = async (id, post) => {
+  return await api.put(`${API_URL}/${id}`, post);
+};
 const PostService = {
   createPost,
   getPosts,
   getPostById,
+  DeletePost,
 };
 
 export default PostService;
