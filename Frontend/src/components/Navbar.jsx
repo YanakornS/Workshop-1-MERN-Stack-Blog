@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useAuthContext } from "../Contexts/AuthContext";
 import LoginButton from "./LoginButton";
 import RegisterButton from "./RegisterButton";
@@ -8,7 +8,6 @@ import UserProfile from "./UserProfile";
 const Navbar = () => {
   const { user } = useAuthContext(); // ดึงข้อมูลผู้ใช้จาก context
 
-  
   return (
     <div>
       <div className="navbar bg-neutral text-neutral-content text-white">
@@ -49,12 +48,13 @@ const Navbar = () => {
 
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
-            <li>
-              <a href="/create">Create new Post</a>
-            </li>
-            <li>
-              <a href="#">Item 3</a>
-            </li>
+            {user && (
+              <li>
+                <a href="/create" className="btn bg-[#9EDF9C] text-white">
+                  Create new Post
+                </a>
+              </li>
+            )}
           </ul>
         </div>
 

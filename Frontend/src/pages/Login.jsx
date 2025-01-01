@@ -12,7 +12,7 @@ const Login = () => {
   const { login, user: loggedUser } = useAuthContext(); // เรียกใช้ login จาก context
   useEffect(() => {
     if (loggedUser) {
-      navigate("/");
+      navigate("/Home");
     }
   }, [loggedUser]);
 

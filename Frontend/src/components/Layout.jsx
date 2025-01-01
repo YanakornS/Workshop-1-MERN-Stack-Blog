@@ -14,7 +14,7 @@ const Layout = () => {
       <div className="min-h-screen flex flex-col bg-gradient-to-b from-#FFF8E6">
         
         {/* ส่วนของ main content */}
-        <main className="flex-grow px-4 sm:px-6 lg:px-8"> {/* เพิ่ม padding สำหรับทุกขนาดหน้าจอ */}
+        <main className="flex-grow px-4 sm:px-6 lg:px-8 bg-[#FCFAEE]" > {/* เพิ่ม padding สำหรับทุกขนาดหน้าจอ */}
           <Outlet />
         </main>
         

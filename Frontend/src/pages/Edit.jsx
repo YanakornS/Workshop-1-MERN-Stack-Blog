@@ -11,38 +11,35 @@ const Edit = () => {
     title: "",
     summary: "",
     content: "",
-    file: "",
+    file: null,
   });
 
   const [content, setContent] = useState("");
   const editorRef = useRef(null);
   const navigate = useNavigate();
-  const { id } = useParams(); // Use params to get the post ID from the URL
-
-  // Fetch the post data to edit
-  useEffect(() => {
-    const fetchPost = async () => {
+  const { id } = useParams(); // รับ ID จาก URL
+useEffect(() => {
+    const fetchPostData = async () => {
       try {
         const response = await PostService.getPostById(id);
-        if (response.status === 200) {
-          const post = response.data;
-          setPostDetail({
-            title: post.title,
-            summary: post.summary,
-            content: post.content,
-            file: post.file,
-          });
-          setContent(post.content); // Set the initial content
-        }
+        const post = response.data;
+        setPostDetail({
+          title: post.title,
+          summary: post.summary,
+          content: post.content,
+          file: null,
+        });
+        setContent(post.content);
       } catch (error) {
         Swal.fire({
           title: "Error",
-          text: "Error loading post. Please try again.",
+          text: "Failed to load post data.",
           icon: "error",
         });
       }
     };
-    fetchPost();
+
+    fetchPostData();
   }, [id]);
 
   const handleChange = (e) => {
@@ -53,6 +50,7 @@ const Edit = () => {
       setPostDetail({ ...postDetail, [name]: value });
     }
   };
+
 
   const handleContentChange = (value) => {
     setContent(value);
@@ -77,7 +75,7 @@ const Edit = () => {
           text: "Post updated successfully.",
           icon: "success",
         }).then(() => {
-          navigate(`/post/${id}`); // Redirect to the updated post page
+          navigate(`/post/${id}`); // กลับไปที่หน้าโพสต์
         });
       } else {
         Swal.fire({
@@ -89,9 +87,7 @@ const Edit = () => {
     } catch (error) {
       Swal.fire({
         title: "Error",
-        text:
-          error.response?.data?.message ||
-          "An error occurred. Please try again.",
+        text: error.response?.data?.message || "An error occurred. Please try again.",
         icon: "error",
       });
     }

@@ -58,7 +58,7 @@ const Create = () => {
           });
         });
 
-        navigate("/");
+        navigate("/Home");
       } else {
         Swal.fire({
           title: "Error",
