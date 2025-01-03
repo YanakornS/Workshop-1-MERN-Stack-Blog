@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 });
 
 //Use Router
-app.use("/api/v1/", userRouter);
+app.use("/api/v1", userRouter);
 app.use("/api/v1/post", postRouter);
 
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
