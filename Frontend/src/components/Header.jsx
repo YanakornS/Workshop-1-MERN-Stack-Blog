@@ -14,7 +14,7 @@ const Header = () => {
           className="h-12 w-14 mr-4" // ปรับขนาดและระยะห่าง
         />
         {/* ชื่อเว็บไซต์ */}
-        <p className="text-2xl font-bold text-[#9EDF9C] ">WebBlog</p>
+        <p className="text-2xl font-bold text-[#9EDF9C] "></p>
       </div>
     </>
   );

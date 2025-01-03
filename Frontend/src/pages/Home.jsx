@@ -21,7 +21,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="bg-gray-50 min-h-screen py-8 bg-[#FCFAEE]">
+    <div className="bg-[#FCFAEE] min-h-screen py-8 bg-[#FCFAEE]">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex flex-col space-y-6 ">
           {posts.length > 0 &&

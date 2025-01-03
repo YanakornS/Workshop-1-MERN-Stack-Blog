@@ -23,7 +23,7 @@ const Login = () => {
       if (response.status === 200) {
         Swal.fire({
           title: "Login Successful",
-          text: "Welcome back!",
+          text: "Welcome back to the blog!",
           icon: "success",
         });
         login(response.data.user); // เรียกใช้ login จาก context เพื่ออัปเดตสถานะผู้ใช้
@@ -84,7 +84,7 @@ const Login = () => {
         <p className="text-center mt-4 text-sm">
           Don't have an account?{" "}
           <a href="/register" className="text-blue-500">
-            Sign up
+            Register 
           </a>
         </p>
       </div>

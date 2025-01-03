@@ -11,7 +11,7 @@ const Post = ({ title, author, summary, cover, createdAt, _id }) => {
             <img
               src={`${API_URL}/${cover}`}
               alt={title}
-              className="w-full h-56 object-cover lg:h-full lg:rounded-l-lg"
+              className="w-full h-64 object-cover lg:h-64 lg:w-full lg:rounded-l-lg"
             />
           </a>
         </figure>
