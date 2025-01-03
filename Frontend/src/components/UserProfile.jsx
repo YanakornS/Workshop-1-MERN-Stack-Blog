@@ -4,8 +4,8 @@ import { useNavigate, Link } from "react-router";
 import Swal from "sweetalert2";
 
 //Import รูปเข้ามา
-import Logout from "../assets/logout.png";
-import Profiles from "../assets/profiles.png";
+import Logout from "../assets/Logout.png";
+import Profiles from "../assets/Profiles.png";
 
 const UserProfile = () => {
   const { logout } = useAuthContext(); // ดึงฟังก์ชัน logout จาก context
