@@ -9,7 +9,7 @@ const Post = ({ title, author, summary, cover, createdAt, _id }) => {
         <figure className="w-full lg:w-1/3">
           <a href={`/post/${_id}`} className="block">
             <img
-              src={`${API_URL}/${cover}`}
+              src={`${cover}`}
               alt={title}
               className="w-full h-64 object-cover lg:h-64 lg:w-full lg:rounded-l-lg"
             />

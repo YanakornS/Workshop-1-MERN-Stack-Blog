@@ -84,7 +84,10 @@ const PostDetail = () => {
           </time>
           <div className="author mb-2">
             <span className=" text-blue-500">
-              @{postDetail.author.username}{" "}
+              @
+              <a href={`/author/${postDetail.author._id}`}>
+                {postDetail.author.username}
+              </a>
             </span>
           </div>
         </div>

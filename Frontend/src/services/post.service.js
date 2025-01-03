@@ -31,12 +31,17 @@ const updatePost = async (id, post) => {
   return await api.put(`${API_URL}/${id}`, post);
 };
 
+const getPostByAuth = async (id) => {
+  return await api.get(`${API_URL}/author/${id}`);
+};
+
 const PostService = {
   createPost,
   getPosts,
   getPostById,
   DeletePost,
   updatePost,
+  getPostByAuth,
 };
 
 export default PostService;

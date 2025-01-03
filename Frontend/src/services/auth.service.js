@@ -3,10 +3,10 @@ import Tokenservice from "./token.service"; // นำเข้า Tokenservice
 import { Cookies } from "react-cookie";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL; // ต้องตรวจสอบว่า BASE_URL ถูกต้อง
-const API_URL = import.meta.env.VITE_BASE_URL;
+const API_URL = import.meta.env.VITE_BASE;
 
 const register = async (username, password) => {
-  return await api.post(BASE_URL + "/register", { username, password });
+  return await api.post(API_URL + "/register", { username, password });
 };
 
 const cookies = new Cookies();

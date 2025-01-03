@@ -2,10 +2,10 @@
 const apiKey = process.env.APIKEY;
 const firebaseConfig = {
   apiKey: apiKey,
-  authDomain: "component-97b01.firebaseapp.com",
-  projectId: "component-97b01",
-  storageBucket: "component-97b01.firebasestorage.app",
-  messagingSenderId: "1076820290615",
-  appId: "1:1076820290615:web:e6184d9c0b5b6eb10063b2",
+  authDomain: process.env.authDomain,
+  projectId: process.env.projectId,
+  storageBucket: process.env.storageBucket,
+  messagingSenderId: process.env.messagingSenderId,
+  appId: process.env.appId,
 };
 module.exports = firebaseConfig;

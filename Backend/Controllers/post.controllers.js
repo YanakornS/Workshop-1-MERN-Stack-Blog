@@ -4,33 +4,38 @@ require("dotenv").config();
 
 // Create Post controller
 exports.createPost = async (req, res) => {
-  // File upload
-  try {
-    const { path: cover } = req.file;
-    const author = req.userId;
-    const { title, summary, content } = req.body;
-    if (!title || !summary || !content) {
-      return res.status(400).json({ message: "All fields is required" });
-    }
+  //File upload
+  if (!req.file) {
+    return res.status(400).json({ message: "Image is required" });
+  }
+  const { path } = req.file.firebaseUrl;
+  console.log(path);
 
+  const author = req.userId;
+  const { title, summary, content } = req.body;
+  if (!title || !summary || !content) {
+    return res.status(400).json({ message: "All Fields is requires" });
+  }
+
+  try {
     const postDoc = await PostModel.create({
       title,
       summary,
       content,
-      cover,
+      cover: req.file.firebaseUrl,
       author,
     });
     if (!postDoc) {
-      res.status(404).send({
-        message: "Post notfound",
+      res.status(400).send({
+        message: "Cannot create new post!",
       });
       return;
     }
     res.json(postDoc);
   } catch (error) {
-    console.log(error.message);
     res.status(500).send({
-      message: "There was an error while creating the post.",
+      message:
+        error.message || "Something error occurred while creating a new post.",
     });
   }
 };
@@ -114,8 +119,7 @@ exports.updatePost = async (req, res) => {
     postDoc.summary = summary;
     postDoc.content = content;
     if (req.file) {
-      const { path } = req.file;
-      postDoc.cover = path;
+      postDoc.cover = req.file.firebaseUrl;
     }
     await postDoc.save();
     res.json(postDoc);
@@ -123,6 +127,28 @@ exports.updatePost = async (req, res) => {
     res.status(500).send({
       message:
         error.message || "Somthing error occurrend white updating a post",
+    });
+  }
+};
+
+exports.getPostByUserId = async (req, res) => {
+  const { id } = req.params; // รับ userId จาก URL
+
+  try {
+    const userPosts = await PostModel.find({ author: id })
+      .populate("author", "username") // เพิ่มข้อมูลของ author (username)
+      .sort({ createdAt: -1 }); // เรียงโพสต์จากใหม่ไปเก่า
+
+    if (!userPosts || userPosts.length === 0) {
+      return res.status(404).json({ message: "No posts found for this user" });
+    }
+
+    res.status(200).json(userPosts);
+  } catch (error) {
+    console.error("Error getting posts by user ID:", error.message);
+    res.status(500).json({
+      message: "An error occurred while getting posts by user ID.",
+      error: error.message,
     });
   }
 };

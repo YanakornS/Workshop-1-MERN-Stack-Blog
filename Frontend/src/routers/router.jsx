@@ -8,7 +8,7 @@ import Layout from "../components/Layout";
 import Home from "../pages/Home";
 import Edit from "../pages/Edit";
 import PostDetail from "../pages/PostDetail";
-
+import PostByAuthor from "../pages/PostByAuthor";
 
 const router = createBrowserRouter([
   {
@@ -39,7 +39,10 @@ const router = createBrowserRouter([
         path: "Post/:id",
         element: <PostDetail />,
       },
-      
+      {
+        path: "author/:id",
+        element: <PostByAuthor />,
+      },
     ],
   },
 ]);
