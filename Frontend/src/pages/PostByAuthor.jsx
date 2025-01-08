@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router"; // ใช้ useParams
+import { useParams } from "react-router";
 import PostService from "../services/post.service";
 import Post from "../components/Post";
 import { useAuthContext } from "../Contexts/AuthContext";
 
 const PostByAuthor = () => {
   const [posts, setPosts] = useState([]);
+  const [postDetail, setPostDetail] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null); // state สำหรับผู้ใช้งานปัจจุบัน
+
   const { id } = useParams(); // ดึง id จาก URL
   const { user } = useAuthContext();
 
@@ -15,6 +18,9 @@ const PostByAuthor = () => {
         const response = await PostService.getPostByAuth(id);
         if (response.status === 200) {
           setPosts(response.data);
+          if (response.data.length > 0) {
+            setPostDetail(response.data[0]); // ตั้งค่า postDetail เป็นโพสต์แรก
+          }
         }
       } catch (error) {
         console.error("There was an error fetching the posts:", error);
@@ -23,6 +29,11 @@ const PostByAuthor = () => {
 
     if (id) fetchPosts();
   }, [id]);
+
+  const Author =
+    postDetail &&
+    currentUser &&
+    currentUser.id === postDetail.author._id; // ตรวจสอบว่าเป็นเจ้าของโพสต์หรือไม่
 
   return (
     <div className="bg-[#FCFAEE] min-h-screen py-8 flex justify-center items-center">
@@ -40,11 +51,16 @@ const PostByAuthor = () => {
             </div>
             <div>
               <h2 className="text-2xl font-semibold mb-2">User Profile</h2>
-              <p className="text-gray-800">
-                <strong>
-                  Username:<a className="text-blue-500">@{user.username}</a>
-                </strong>
-              </p>
+              {postDetail?.author ? (
+                <p className="text-gray-800">
+                  <strong>
+                    Username:{" "}
+                    <a className="text-blue-500">@{postDetail.author.username}</a>
+                  </strong>
+                </p>
+              ) : (
+                <p className="text-gray-800">Loading author...</p>
+              )}
             </div>
           </div>
         </div>
