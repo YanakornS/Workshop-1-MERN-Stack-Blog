@@ -28,7 +28,11 @@ const DeletePost = async (id) => {
 
 // UpdatePost posts
 const updatePost = async (id, post) => {
-  return await api.put(`${API_URL}/${id}`, post);
+  return await api.put(`${API_URL}/${id}`, post, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
 
 const getPostByAuth = async (id) => {
