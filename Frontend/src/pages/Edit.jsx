@@ -18,28 +18,25 @@ const Edit = () => {
   const editorRef = useRef(null);
   const navigate = useNavigate();
   const { id } = useParams(); // รับ ID จาก URL
-useEffect(() => {
-    const fetchPostData = async () => {
+  useEffect(() => {
+    const fetchPost = async () => {
       try {
         const response = await PostService.getPostById(id);
-        const post = response.data;
-        setPostDetail({
-          title: post.title,
-          summary: post.summary,
-          content: post.content,
-          file: null,
-        });
-        setContent(post.content);
+
+        if (response.status === 200) {
+          setPostDetail(response.data);
+          setContent(response.data.content);
+        }
       } catch (error) {
         Swal.fire({
-          title: "Error",
-          text: "Failed to load post data.",
+          title: "Update Post",
+          text:
+            error?.response?.data?.message || "Failed to load post details.",
           icon: "error",
         });
       }
     };
-
-    fetchPostData();
+    fetchPost();
   }, [id]);
 
   const handleChange = (e) => {
@@ -51,10 +48,8 @@ useEffect(() => {
     }
   };
 
-
   const handleContentChange = (value) => {
     setContent(value);
-    setPostDetail({ ...postDetail, content: value });
   };
 
   const handleSubmit = async () => {
@@ -62,7 +57,7 @@ useEffect(() => {
       const data = new FormData();
       data.set("title", postDetail.title);
       data.set("summary", postDetail.summary);
-      data.set("content", postDetail.content);
+      data.set("content", content);
       if (postDetail.file) {
         data.set("file", postDetail.file);
       }
@@ -87,7 +82,9 @@ useEffect(() => {
     } catch (error) {
       Swal.fire({
         title: "Error",
-        text: error.response?.data?.message || "An error occurred. Please try again.",
+        text:
+          error.response?.data?.message ||
+          "An error occurred. Please try again.",
         icon: "error",
       });
     }
